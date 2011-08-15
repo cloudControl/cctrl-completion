@@ -56,6 +56,14 @@ __cctrl_app ()
                         addon.*)
                             opts=${addon_types}
                             ;;
+                        worker.remove)
+                            # First argument is actually a deployment?
+                            if [[ ${deployments[*]} =~ ${COMP_WORDS[1]} ]]
+                            then
+                                # Ask the API for the list of workers.
+                                opts=`cctrlapp ${COMP_WORDS[1]} worker | grep -ve '^Workers' | grep -ve '^ nr\.' | tr -s " " | cut -f3 -d " "`
+                            fi
+                            ;;
                         log)
                             opts=${log_types}
                             ;;
