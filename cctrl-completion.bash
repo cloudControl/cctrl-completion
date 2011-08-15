@@ -27,6 +27,9 @@ __cctrl_app ()
 
     local app_opts="create details delete user user.add user.remove"
     local deployment_opts="create details deploy undeploy push addon addon.list addon.add addon.upgrade addon.downgrade addon.remove alias alias.add alias.remove worker worker.add worker.remove cron cron.add cron.remove log"
+
+    local log_types="access error worker deploy"
+
     local cur prev opts
 
     cur="${COMP_WORDS[COMP_CWORD]}"
@@ -48,7 +51,14 @@ __cctrl_app ()
                 then
                     opts=${deployment_opts}
                 else
-                    opts="${CCTRL_APPS} ${CCTRL_DEPLOYMENTS}"
+                    case "$prev" in
+                        log)
+                            opts=log_types
+                            ;;
+                        *)
+                            opts="${CCTRL_APPS} ${CCTRL_DEPLOYMENTS}"
+                            ;;
+                    esac
                 fi
             fi
             ;;
