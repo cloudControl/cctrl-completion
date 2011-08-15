@@ -65,7 +65,11 @@ __cctrl_app ()
                             then
                                 opts=${addon_types}
                             else
-                                opts="${CCTRL_APPS} ${CCTRL_DEPLOYMENTS}"
+                                # only the second argument is the deployment
+                                if [[ $COMP_CWORD == 1 ]]
+                                then
+                                    opts="${CCTRL_APPS} ${CCTRL_DEPLOYMENTS}"
+                                fi
                             fi
                             ;;
                     esac
