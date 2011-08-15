@@ -29,6 +29,7 @@ __cctrl_app ()
     local deployment_opts="create details deploy undeploy push addon addon.list addon.add addon.upgrade addon.downgrade addon.remove alias alias.add alias.remove worker worker.add worker.remove cron cron.add cron.remove log"
 
     local log_types="access error worker deploy"
+    local addon_types="mysql.20gb mysql.512mb mysql.free alias.free alias.wildcard memcached.100mb memcached.250mb memcached.free mongodb.256mb mongodb.2gb mongodb.5gb mongodb.free worker.single newrelic.standard newrelic.professional cron.free cron.hourly"
 
     local cur prev opts
 
@@ -52,11 +53,20 @@ __cctrl_app ()
                     opts=${deployment_opts}
                 else
                     case "$prev" in
+                        addon.*)
+                            opts=${addon_types}
+                            ;;
                         log)
-                            opts=log_types
+                            opts=${log_types}
                             ;;
                         *)
-                            opts="${CCTRL_APPS} ${CCTRL_DEPLOYMENTS}"
+                            # addon.upgrade/downgrade <addon> <addon>
+                            if [[ ${addon_types[*]} =~ $prev ]]
+                            then
+                                opts=${addon_types}
+                            else
+                                opts="${CCTRL_APPS} ${CCTRL_DEPLOYMENTS}"
+                            fi
                             ;;
                     esac
                 fi
