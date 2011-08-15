@@ -15,7 +15,15 @@ __cctrl_user ()
             opts="-h --help -v --version"
             ;;
         *)
-            opts="create activate delete key key.add key.remove logout"
+            case "$prev" in
+                key.remove)
+                    # Ask the API for the list of keys.
+                    opts=`cctrluser key | grep -ve '^Keys' | tr -s " " | cut -f2 -d " "`
+                    ;;
+                *)
+                    opts="create activate delete key key.add key.remove logout"
+                    ;;
+            esac
             ;;
     esac
 
