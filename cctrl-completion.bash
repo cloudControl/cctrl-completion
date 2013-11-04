@@ -33,9 +33,8 @@ __cctrl_app ()
 {
     __cctrl
 
-    local app_opts="create details delete user user.add user.remove"
-    local deployment_opts="create details deploy undeploy push addon addon.list addon.add addon.upgrade addon.downgrade addon.remove alias alias.add alias.remove worker worker.add worker.remove cron cron.add cron.remove log"
-
+    local app_opts="create details delete user user.add user.remove addon.list"
+    local deployment_opts="details deploy undeploy push addon addon.list addon.add addon.upgrade addon.downgrade addon.remove alias alias.add alias.remove worker worker.add worker.remove cron cron.add cron.remove log open"
     local log_types="access error worker deploy"
     local addon_types="mysql.20gb mysql.512mb mysql.free alias.free alias.wildcard memcached.100mb memcached.250mb memcached.free mongodb.256mb mongodb.2gb mongodb.5gb mongodb.free worker.single newrelic.standard newrelic.professional cron.free cron.hourly"
 
