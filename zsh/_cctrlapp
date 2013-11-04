@@ -3,13 +3,15 @@
 typeset -A opt_args
 
 _arguments -C \
-  '1:appDeploy:->appDeploy' \
+  '1:app_deployment:->app_deployment' \
   '2:cmds:->cmds' \
-  '*:: :->args' \
+  '3:args:->args' \
+  '4:other_args :->other_args' \
+  '*:: :->rest_args' \
 && ret=0
 
 case "$state" in
-  (appDeploy)
+  (app_deployment)
      local commands; commands=(
      '-l:list apps' \
      '-h:help' \
@@ -68,23 +70,36 @@ case "$state" in
   ;;
   (args)
     case $line[2] in
-      (controller)
-        _arguments \
-          '-d:remove all generated files' \
-          '-n:specify the application' \
-          '-r:specify the root'
-          ret=0
-      ;;
-      (mailer)
-        local mailers; mailers=(
-          '-a:creates a mailer for the specified subapp'
-          '-d:removes all generated files'
-          '-n:specify the application'
-          '-r:specify the root destination path'
+      (create)
+        local lang_cmds; lang_cmds=(
+          'Java:Java' 
+          'PHP:PHP' 
+          'Python:Python'
+		  'Ruby:Ruby'
+		  'custom:custom buildpack' # --buildpack: custom buildpack BUILDPACK_REPOSITORY_URL
         )
-        _describe -t mailers 'mailer' mailers && ret=0
+        _describe -t lang_cmds 'lang_cmds' lang_cmds && ret=0
+      ;;
+      (log)
+        local log_cmds; log_cmds=(
+		  'access:requests to your app'
+          'deploy:detailed information about the deploy process'
+          'error:all output printed to stdout, stderr and syslog'
+          'worker:all output print to stdout, stderr and syslog'
+        )
+        _describe -t log_cmds 'log_cmds' log_cmds && ret=0
       ;;
     esac
+  ;;
+  (other_args)
+   case $line[3] in
+   (custom)
+        local custom_lang_cmds; custom_lang_cmds=(
+		  '--buildpack:buildpack BUILDPACK_REPOSITORY_URL'
+        )
+        _describe -t custom_lang_cmds 'custom_lang_cmds' custom_lang_cmds && ret=0
+	;;
+	esac
   ;;
 esac
 
