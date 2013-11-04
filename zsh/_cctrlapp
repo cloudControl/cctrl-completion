@@ -21,18 +21,45 @@ case "$state" in
       _describe -t commands 'command' commands && ret=0
   ;;
   (cmds)
-  echo "yes"
-  	local wtfs; wtfs=(${(s./.)line[1]})
-	  if [[ $#wtfs == 1 ]]; then
-		local appcmds; appcmds=(
+  	local appCommand; appCommand=(${(s./.)line[1]})
+	  if [[ $#appCommand == 1 ]]; then
+		local app_cmds; app_cmds=(
 		  'create:create new application' \
 		  'delete:delete the application' \
 		  'details:application details'
 		  )
-		_describe -t appcmds 'appcmds' appcmds && ret=0
-#	  else
-#	  echo "nix"
-#	  ret=0
+		_describe -t app_cmds 'app_cmds' app_cmds && ret=0
+	  else
+		local deployment_cmds; deployment_cmds=(
+		'run:run command'
+		'details:deployment details'
+		'push:push local changes'
+		'deploy:deploy version'
+		'undeploy:delete deployment'
+		'user:list app users'
+		'user.add:add user by email'
+		'user.remove:remove user by username or email'
+		'addon:show addon'
+		'addon.list:list all available addons'
+		'addon.creds:print creds.json format to stdout'
+		'addon.add:add addon'
+		'addon.upgrade:upgrade addon'
+		'addon.downgrade:downgrade addon'
+		'addon.remove:remove addon'
+		'alias:show alias'
+		'alias.add:add alias'
+		'alias.remove:remove alias'
+		'worker:show worker'
+		'worker.add:start worker'
+		'worker.remove:stop worker'
+		'cron:show cronjobs'
+		'cron.add:add cronjob'
+		'cron.remove:remove cronjob'
+		'log:show the log'
+		'open:open deployment on default browser'
+		  )
+		_describe -t deployment_cmds 'deployment_cmds' deployment_cmds && ret=0
+	  
 	  fi
   ;;
   (args)
