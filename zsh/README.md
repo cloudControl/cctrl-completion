@@ -9,10 +9,6 @@ fpath=($HOME/.zsh-completions $fpath)
 
 # enable autocomplete function
 autoload -U compinit
-compinitath)
-
-# enable autocomplete function
-autoload -U compinit
 compinit
 ~~~
 
