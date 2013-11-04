@@ -1,0 +1,60 @@
+#compdef cctrlapp
+
+typeset -A opt_args
+
+_arguments -C \
+  '1:appDeploy:->appDeploy' \
+  '2:cmds:->cmds' \
+  '*:: :->args' \
+&& ret=0
+
+case "$state" in
+  (appDeploy)
+     local commands; commands=(
+     '-l:list apps' \
+     '-h:help' \
+	 'APP_NAME:Application name' \
+ 	 'APP_NAME/default:Application name with default deployment' \
+  	 'APP_NAME/DEP_NAME:Application name with branch deployment' 
+     )
+
+      _describe -t commands 'command' commands && ret=0
+  ;;
+  (cmds)
+  echo "yes"
+  	local wtfs; wtfs=(${(s./.)line[1]})
+	  if [[ $#wtfs == 1 ]]; then
+		local appcmds; appcmds=(
+		  'create:create new application' \
+		  'delete:delete the application' \
+		  'details:application details'
+		  )
+		_describe -t appcmds 'appcmds' appcmds && ret=0
+#	  else
+#	  echo "nix"
+#	  ret=0
+	  fi
+  ;;
+  (args)
+    case $line[2] in
+      (controller)
+        _arguments \
+          '-d:remove all generated files' \
+          '-n:specify the application' \
+          '-r:specify the root'
+          ret=0
+      ;;
+      (mailer)
+        local mailers; mailers=(
+          '-a:creates a mailer for the specified subapp'
+          '-d:removes all generated files'
+          '-n:specify the application'
+          '-r:specify the root destination path'
+        )
+        _describe -t mailers 'mailer' mailers && ret=0
+      ;;
+    esac
+  ;;
+esac
+
+return 1
