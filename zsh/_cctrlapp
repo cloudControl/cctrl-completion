@@ -1,0 +1,106 @@
+#compdef cctrlapp
+
+typeset -A opt_args
+
+_arguments -C \
+  '1:app_deployment:->app_deployment' \
+  '2:cmds:->cmds' \
+  '3:args:->args' \
+  '4:other_args :->other_args' \
+  '*:: :->rest_args' \
+&& ret=0
+
+case "$state" in
+  (app_deployment)
+     local commands; commands=(
+     '-l:list apps' \
+     '-h:help' \
+	 'APP_NAME:Application name' \
+ 	 'APP_NAME/default:Application name with default deployment' \
+  	 'APP_NAME/DEP_NAME:Application name with branch deployment' 
+     )
+
+      _describe -t commands 'command' commands && ret=0
+  ;;
+  (cmds)
+  	local appCommand; appCommand=(${(s./.)line[1]})
+	  if [[ $#appCommand == 1 ]]; then
+		local app_cmds; app_cmds=(
+		  'create:create new application'
+		  'delete:delete the application'
+		  'details:application details'
+          'addon.list:list all available addons'
+          'user:list app users'
+          'user.add:add user by email'
+          'user.remove:remove user by username or email'
+		  )
+		_describe -t app_cmds 'app_cmds' app_cmds && ret=0
+	  else
+		local deployment_cmds; deployment_cmds=(
+		'run:run command'
+		'details:deployment details'
+		'push:push local changes'
+		'deploy:deploy version'
+		'undeploy:delete deployment'
+		'user:list app users'
+		'user.add:add user by email'
+		'user.remove:remove user by username or email'
+		'addon:show addon'
+		'addon.list:list all available addons'
+		'addon.creds:print creds.json format to stdout'
+		'addon.add:add addon'
+		'addon.upgrade:upgrade addon'
+		'addon.downgrade:downgrade addon'
+		'addon.remove:remove addon'
+		'alias:show alias'
+		'alias.add:add alias'
+		'alias.remove:remove alias'
+		'worker:show worker'
+		'worker.add:start worker'
+		'worker.remove:stop worker'
+		'cron:show cronjobs'
+		'cron.add:add cronjob'
+		'cron.remove:remove cronjob'
+		'log:show the log'
+		'open:open deployment on default browser'
+		  )
+		_describe -t deployment_cmds 'deployment_cmds' deployment_cmds && ret=0
+	  
+	  fi
+  ;;
+  (args)
+    case $line[2] in
+      (create)
+        local lang_cmds; lang_cmds=(
+          'Java:Java' 
+          'PHP:PHP' 
+          'Python:Python'
+		  'Ruby:Ruby'
+		  'custom:custom buildpack' # --buildpack: custom buildpack BUILDPACK_REPOSITORY_URL
+        )
+        _describe -t lang_cmds 'lang_cmds' lang_cmds && ret=0
+      ;;
+      (log)
+        local log_cmds; log_cmds=(
+		  'access:requests to your app'
+          'deploy:detailed information about the deploy process'
+          'error:all output printed to stdout, stderr and syslog'
+          'worker:all output print to stdout, stderr and syslog'
+        )
+        _describe -t log_cmds 'log_cmds' log_cmds && ret=0
+      ;;
+    esac
+  ;;
+  (other_args)
+   case $line[3] in
+   (custom)
+        local custom_lang_cmds; custom_lang_cmds=(
+		  '--buildpack:buildpack BUILDPACK_REPOSITORY_URL'
+        )
+        _describe -t custom_lang_cmds 'custom_lang_cmds' custom_lang_cmds && ret=0
+	;;
+	esac
+  ;;
+esac
+
+return 1
