@@ -24,9 +24,13 @@ case "$state" in
   	local appCommand; appCommand=(${(s./.)line[1]})
 	  if [[ $#appCommand == 1 ]]; then
 		local app_cmds; app_cmds=(
-		  'create:create new application' \
-		  'delete:delete the application' \
+		  'create:create new application'
+		  'delete:delete the application'
 		  'details:application details'
+          'addon.list:list all available addons'
+          'user:list app users'
+          'user.add:add user by email'
+          'user.remove:remove user by username or email'
 		  )
 		_describe -t app_cmds 'app_cmds' app_cmds && ret=0
 	  else
